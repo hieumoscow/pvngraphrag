@@ -31,3 +31,4 @@ venv
 
 # Environment variables
 *.env
+pvn/cache

@@ -1,0 +1,106 @@
+
+-Goal-
+Given a text document that is potentially relevant to this activity and a list of entity types, identify all entities of those types from the text and all relationships among the identified entities.
+
+-Steps-
+1. Identify all entities. For each identified entity, extract the following information:
+- entity_name: Name of the entity, capitalized
+- entity_type: One of the following types: [organization, decision, program, regulation, plan, report, event, leader, stakeholder, initiative, policy, training, recognition]
+- entity_description: Comprehensive description of the entity's attributes and activities
+Format each entity as ("entity"{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_description>)
+
+2. From the entities identified in step 1, identify all pairs of (source_entity, target_entity) that are *clearly related* to each other.
+For each pair of related entities, extract the following information:
+- source_entity: name of the source entity, as identified in step 1
+- target_entity: name of the target entity, as identified in step 1
+- relationship_description: explanation as to why you think the source entity and the target entity are related to each other
+- relationship_strength: an integer score between 1 to 10, indicating strength of the relationship between the source entity and target entity
+Format each relationship as ("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_strength>)
+
+3. Return output in Vietnamese as a single list of all the entities and relationships identified in steps 1 and 2. Use **{record_delimiter}** as the list delimiter.
+
+4. If you have to translate into Vietnamese, just translate the descriptions, nothing else!
+
+5. When finished, output {completion_delimiter}.
+
+-Examples-
+######################
+
+Example 1:
+
+entity_types: [organization, decision, program, regulation, plan, report, event, leader, stakeholder, initiative, policy, training, recognition]
+text:
+ác an sinh xã
+hội của Tập đoàn Dầu khí Việt Nam được ban hành theo Quyết định số 3058/QĐ-
+DKVN ngày 07/06/2022 của Hội đồng Thành viên Tập đoàn và các quyết định,
+hướng dẫn khác có liên quan của Tập đoàn cũng như các quy định của pháp luật.
+\- Thực hiện chương trình ASXH đã cam kết theo kế hoạch đảm bảo đúng tiến
+độ, đối tượng; hoàn thiện hồ sơ quyết toán đảm bảo đúng quy định, báo cáo đánh
+giá hiệu qu
+------------------------
+output:
+("entity"{tuple_delimiter}TẬP ĐOÀN DẦU KHÍ VIỆT NAM{tuple_delimiter}ORGANIZATION{tuple_delimiter}Tập đoàn Dầu khí Việt Nam là một tổ chức thực hiện các chương trình an sinh xã hội theo các quyết định và hướng dẫn của pháp luật và của tập đoàn)
+{record_delimiter}
+("entity"{tuple_delimiter}QUYẾT ĐỊNH SỐ 3058/QĐ-DKVN{tuple_delimiter}DECISION{tuple_delimiter}Quyết định số 3058/QĐ-DKVN được ban hành ngày 07/06/2022 bởi Hội đồng Thành viên Tập đoàn Dầu khí Việt Nam)
+{record_delimiter}
+("entity"{tuple_delimiter}HỘI ĐỒNG THÀNH VIÊN TẬP ĐOÀN{tuple_delimiter}LEADER{tuple_delimiter}Hội đồng Thành viên Tập đoàn là cơ quan ban hành các quyết định liên quan đến các chương trình an sinh xã hội của Tập đoàn Dầu khí Việt Nam)
+{record_delimiter}
+("entity"{tuple_delimiter}CHƯƠNG TRÌNH ASXH{tuple_delimiter}PROGRAM{tuple_delimiter}Chương trình an sinh xã hội (ASXH) được thực hiện theo kế hoạch đảm bảo đúng tiến độ và đối tượng)
+{record_delimiter}
+("relationship"{tuple_delimiter}TẬP ĐOÀN DẦU KHÍ VIỆT NAM{tuple_delimiter}QUYẾT ĐỊNH SỐ 3058/QĐ-DKVN{tuple_delimiter}Quyết định số 3058/QĐ-DKVN được ban hành bởi Tập đoàn Dầu khí Việt Nam{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}HỘI ĐỒNG THÀNH VIÊN TẬP ĐOÀN{tuple_delimiter}QUYẾT ĐỊNH SỐ 3058/QĐ-DKVN{tuple_delimiter}Quyết định số 3058/QĐ-DKVN được ban hành bởi Hội đồng Thành viên Tập đoàn{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}TẬP ĐOÀN DẦU KHÍ VIỆT NAM{tuple_delimiter}CHƯƠNG TRÌNH ASXH{tuple_delimiter}Tập đoàn Dầu khí Việt Nam thực hiện chương trình an sinh xã hội (ASXH){tuple_delimiter}9)
+{completion_delimiter}
+#############################
+
+
+Example 2:
+
+entity_types: [organization, decision, program, regulation, plan, report, event, leader, stakeholder, initiative, policy, training, recognition]
+text:
+>
+</tr>
+</table>
+<!-- PageNumber="23" -->
+<!-- PageBreak -->
+<!-- PageNumber="30" -->
+
+# Các hoạt động an sinh xã hội:
+
+38\. Quyết định số 1985/QĐ-DKVN ngày 16/04/2021 về việc Phê duyệt
+Phương án phân bổ chương trình ASXH năm 2021 - 2022 của PVN để các đơn vị
+thành viên hỗ trợ các địa phương, tổ chức trong cả nước.
+39\. Quyết định số 2192/QĐ-DKVN ngày 28/04/2022 về việc Phê duyệt
+Phương án phân bổ chương trình ASXH năm 2022 - 202
+------------------------
+output:
+("entity"{tuple_delimiter}QUYẾT ĐỊNH SỐ 1985/QĐ-DKVN{tuple_delimiter}DECISION{tuple_delimiter}Quyết định số 1985/QĐ-DKVN ngày 16/04/2021 về việc Phê duyệt Phương án phân bổ chương trình ASXH năm 2021 - 2022 của PVN để các đơn vị thành viên hỗ trợ các địa phương, tổ chức trong cả nước.)
+{record_delimiter}
+("entity"{tuple_delimiter}QUYẾT ĐỊNH SỐ 2192/QĐ-DKVN{tuple_delimiter}DECISION{tuple_delimiter}Quyết định số 2192/QĐ-DKVN ngày 28/04/2022 về việc Phê duyệt Phương án phân bổ chương trình ASXH năm 2022 - 202.)
+{record_delimiter}
+("entity"{tuple_delimiter}CHƯƠNG TRÌNH ASXH{tuple_delimiter}PROGRAM{tuple_delimiter}Chương trình an sinh xã hội (ASXH) được phân bổ theo các quyết định của PVN để hỗ trợ các địa phương và tổ chức trong cả nước.)
+{record_delimiter}
+("entity"{tuple_delimiter}PVN{tuple_delimiter}ORGANIZATION{tuple_delimiter}Tập đoàn Dầu khí Việt Nam (PVN) là tổ chức phê duyệt và phân bổ chương trình ASXH.)
+{record_delimiter}
+("relationship"{tuple_delimiter}QUYẾT ĐỊNH SỐ 1985/QĐ-DKVN{tuple_delimiter}CHƯƠNG TRÌNH ASXH{tuple_delimiter}Quyết định số 1985/QĐ-DKVN phê duyệt phương án phân bổ chương trình ASXH năm 2021 - 2022{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}QUYẾT ĐỊNH SỐ 2192/QĐ-DKVN{tuple_delimiter}CHƯƠNG TRÌNH ASXH{tuple_delimiter}Quyết định số 2192/QĐ-DKVN phê duyệt phương án phân bổ chương trình ASXH năm 2022{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}PVN{tuple_delimiter}CHƯƠNG TRÌNH ASXH{tuple_delimiter}PVN là tổ chức phê duyệt và phân bổ chương trình ASXH{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}PVN{tuple_delimiter}QUYẾT ĐỊNH SỐ 1985/QĐ-DKVN{tuple_delimiter}PVN ban hành Quyết định số 1985/QĐ-DKVN để phê duyệt phương án phân bổ chương trình ASXH năm 2021 - 2022{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}PVN{tuple_delimiter}QUYẾT ĐỊNH SỐ 2192/QĐ-DKVN{tuple_delimiter}PVN ban hành Quyết định số 2192/QĐ-DKVN để phê duyệt phương án phân bổ chương trình ASXH năm 2022{tuple_delimiter}7)
+{completion_delimiter}
+#############################
+
+
+
+-Real Data-
+######################
+entity_types: [organization, decision, program, regulation, plan, report, event, leader, stakeholder, initiative, policy, training, recognition]
+text: {input_text}
+######################
+output:
